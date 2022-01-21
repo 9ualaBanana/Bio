@@ -1,6 +1,6 @@
 <h1 align="center">InputListener</h1>
 
-<p align="center"><em>Handy minimalistic library for input listening that doesn't require any extra dependencies</em></p>
+<p align="center"><em>Handy minimalistic input listening utility with a simple interface</em></p>
 
 ## ✅ Why choose InputListener?
 
