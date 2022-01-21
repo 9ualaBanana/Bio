@@ -12,10 +12,12 @@ then **InputListener** is the way to go. It doesn't need any overcomplicated dep
 > #### 🪢 **Doesn't** require any additional dependencies  
 > #### 🕹 **Extremely simple** interface  
 > #### 🔌 **Easy-pluggable** custom input handlers  
-> #### 🔧 **Auxiliary utilites** facilitate working with the received input  
+> #### 🔧 **Auxiliary utilities** facilitate working with the received input  
 > #### 📘 **Documentation** is nice and clear  
 
 ## 💿 Installation
+
+[Download page](https://www.nuget.org/packages/InputListener/)
 
 For guidance on how to install NuGet packages refer [here](https://docs.microsoft.com/en-us/nuget/quickstart/install-and-use-a-package-using-the-dotnet-cli) and [here](https://docs.microsoft.com/en-us/nuget/quickstart/install-and-use-a-package-in-visual-studio).
 
