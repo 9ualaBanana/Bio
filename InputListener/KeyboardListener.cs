@@ -5,43 +5,51 @@
 /// </summary>
 public class KeyboardListener
 {
-    HashSet<ConsoleKey>? _keysBeingListened;
+    readonly HashSet<ConsoleKey> _keysBeingListened;
     // Although, this field contains the default value for ConsoleKey enum, that can be one of the keys being listened,
     // the event will never be raised until the first input from the client is received by CaptureInput() method after StartListening().
     ConsoleKey _lastPressedKey;
-    CancellationTokenSource _cancellationTokenSource = new();
+    readonly Task _backgroundListener;
+    readonly CancellationTokenSource _cts = new();
 
     bool _started;
+    bool _Stopped => _cts.IsCancellationRequested;
     /// <summary>
     /// Indicates whether the input listener is currently active.
     /// </summary>
-    public bool IsListening => _started && !_cancellationTokenSource.IsCancellationRequested;
+    public bool IsListening => _started && !_Stopped;
 
     /// <summary>
     /// Instantiates <see cref="KeyboardListener"/> that listens for any input from the keyboard.
     /// </summary>
-    public KeyboardListener()
+    public KeyboardListener() : this(Array.Empty<ConsoleKey>(), null)
     {
-        // Functionally almost the same as providing this(params ConsoleKey[]) with no arguments.
-        // The only difference is that this one doesn't instantiate redundant collection for _keysBeingListened.
     }
 
     /// <summary>
     /// Instantiates <see cref="KeyboardListener"/> that listens only for the specified input from the keyboard.
     /// </summary>
     /// <param name="keys">keys to listen to.</param>
-    public KeyboardListener(IEnumerable<ConsoleKey> keys)
+    public KeyboardListener(IEnumerable<ConsoleKey> keys) : this(keys, null)
     {
-        _keysBeingListened = new(keys);
     }
 
     /// <summary>
     /// <inheritdoc cref="KeyboardListener(IEnumerable{ConsoleKey})"/>
     /// </summary>
     /// <param name="keys"><inheritdoc cref="KeyboardListener(IEnumerable{ConsoleKey})"/></param>
-    public KeyboardListener(params ConsoleKey[] keys)
+    public KeyboardListener(params ConsoleKey[] keys) : this(keys, null)
+    {
+    }
+
+    KeyboardListener(IEnumerable<ConsoleKey> keys, object? _)
     {
         _keysBeingListened = new(keys);
+        _backgroundListener = new Task(
+            NotifyClientsWhenInputOfInterestIsCaptured,
+            _cts.Token,
+            TaskCreationOptions.LongRunning
+            );
     }
 
     /// <summary>
@@ -49,15 +57,12 @@ public class KeyboardListener
     /// </summary>
     public void StartListening()
     {
-        _started = true;
         StartListeningInBackground();
     }
     void StartListeningInBackground()
     {
-        Task.Run(
-            NotifyClientsWhenInputOfInterestIsCaptured,
-            _cancellationTokenSource.Token
-            );
+        _backgroundListener.Start();
+        _started = true;
     }
     void NotifyClientsWhenInputOfInterestIsCaptured()
     {
@@ -74,7 +79,7 @@ public class KeyboardListener
     {
         _lastPressedKey = Console.ReadKey(true).Key;
     }
-    bool ClientsShouldBeNotified => _keysBeingListened is null || _keysBeingListened.Contains(_lastPressedKey);
+    bool ClientsShouldBeNotified => _keysBeingListened.Contains(_lastPressedKey);
     void NotifyClients()
     {
         KeyBeingListenedPressed?.Invoke(this, _lastPressedKey);
@@ -96,8 +101,8 @@ public class KeyboardListener
     {
         if (!IsListening) return;
 
-        _cancellationTokenSource.Cancel();
-        _cancellationTokenSource.Dispose();
+        _cts.Cancel();
+        _cts.Dispose();
     }
 
     /// <summary>
