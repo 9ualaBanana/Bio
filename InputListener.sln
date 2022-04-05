@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InputListener", "InputListener\InputListener.csproj", "{703CE682-CC88-442E-BF77-6459E17E3CCE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestKeyboardInputListener", "TestKeyboardInputListener\TestKeyboardInputListener.csproj", "{12E27891-CC98-4822-90AF-C82113C5B39C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InputListener.Test", "TestKeyboardInputListener\InputListener.Test.csproj", "{B7427EA5-A97B-4BBB-A1B8-860C88FA8083}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{703CE682-CC88-442E-BF77-6459E17E3CCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{703CE682-CC88-442E-BF77-6459E17E3CCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{703CE682-CC88-442E-BF77-6459E17E3CCE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{12E27891-CC98-4822-90AF-C82113C5B39C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{12E27891-CC98-4822-90AF-C82113C5B39C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{12E27891-CC98-4822-90AF-C82113C5B39C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{12E27891-CC98-4822-90AF-C82113C5B39C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7427EA5-A97B-4BBB-A1B8-860C88FA8083}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7427EA5-A97B-4BBB-A1B8-860C88FA8083}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7427EA5-A97B-4BBB-A1B8-860C88FA8083}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7427EA5-A97B-4BBB-A1B8-860C88FA8083}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
