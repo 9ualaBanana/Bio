@@ -1,8 +1,11 @@
-﻿namespace InputListener;
+﻿namespace Bio;
 
 /// <summary>
 /// Listens for the specified input from the keyboard and notifies its subscribers about it.
 /// </summary>
+/// <remarks>
+/// Does not support system keys and key combinations.
+/// </remarks>
 public class KeyboardListener
 {
     readonly HashSet<ConsoleKey> _keysBeingListened;
@@ -42,6 +45,7 @@ public class KeyboardListener
     {
     }
 
+    // `_` parameter is the discard that overloads the constructor.
     KeyboardListener(IEnumerable<ConsoleKey> keys, object? _)
     {
         _keysBeingListened = new(keys);

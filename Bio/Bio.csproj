@@ -5,15 +5,19 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 	  
-	<PackageId>InputListener</PackageId>
-	<Version>1.0.3</Version>
+	<PackageId>Bio</PackageId>
+	<Version>2.0.0</Version>
 	<Authors>GualaBanana</Authors>
 	<Company>GualaBanana</Company>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Description>Minimalistic input listening utility with a simple interface.</Description>
-    <RepositoryUrl>https://github.com/GualaBanana/InputListener</RepositoryUrl>
-    <PackageTags>input; keyboard; input-listener;</PackageTags>
+    <Description>Full control of input/output on any level.</Description>
+    <RepositoryUrl>https://github.com/GualaBanana/Bio</RepositoryUrl>
+    <PackageTags>io; input; output; hook; keyboard; input-listener; library;</PackageTags>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
+
+	<ItemGroup>
+		<InternalsVisibleTo Include="Bio.Test" />
+	</ItemGroup>
 
 </Project>

@@ -1,7 +1,6 @@
 using Xunit;
-using InputListener;
 
-namespace TestKeyboardInputListener.Tests;
+namespace Bio.Test;
  
 public class TestInputListenerCore
 {

@@ -1,4 +1,4 @@
-﻿namespace InputListener.Translation;
+﻿namespace Bio;
 
 /// <summary>
 /// Defines a generalized method for translation of raw <see cref="ConsoleKey"/> input to <see cref="TTranslated"/>.
