@@ -1,7 +1,7 @@
 ﻿namespace Bio.Win32;
 
 [Flags]
-public enum KBDLLHOOKSTRUCTFlags : uint
+public enum KBDLLHOOKSTRUCTF : uint
 {
     LLKHF_EXTENDED = 0x01,
     LLKHF_INJECTED = 0x10,

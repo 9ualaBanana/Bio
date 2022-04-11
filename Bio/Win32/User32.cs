@@ -7,12 +7,15 @@ internal static class User32
     [DllImport("User32.dll")]
     internal static extern int GetMessage(out IntPtr lpMsg, IntPtr hWnd, uint wMsgFilterMin, uint wMsgFilterMax);
 
+    [DllImport("user32.dll")]
+    public static extern bool PostThreadMessage(uint threadId, uint msg, UIntPtr wParam, IntPtr lParam);
+
     [DllImport("User32.dll")]
-    internal extern static IntPtr CallNextHookEx(IntPtr hhk, int nCode, IntPtr wParam, IntPtr lParam);
+    internal static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode, IntPtr wParam, IntPtr lParam);
 
     [DllImport("User32.dll")]
     internal static extern IntPtr SetWindowsHookEx(WH hookType, HOOKPROC lpfn, IntPtr hMod, uint dwThreadId);
 
     [DllImport("User32.dll")]
-    internal extern static bool UnhookWindowsHookEx(IntPtr hhk);
+    internal static extern bool UnhookWindowsHookEx(IntPtr hhk);
 }

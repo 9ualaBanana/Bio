@@ -84,7 +84,7 @@ public class KeyboardHook : IDisposable
     {
         SetHook();
         _win32SetHookWasCalled.Set();
-        GetMessage();
+        if (!CurrentThreadHasMessageLoop) StartMessageLoop();
     }
     void SetHook()
     {
@@ -99,10 +99,21 @@ public class KeyboardHook : IDisposable
     /// to that thread, which is a requirement for the hook to work, because the call is made only if
     /// the thread where the hook was set has a receiver for those messages, i.e., a message loop.
     /// </remarks>
-    static void GetMessage()
+    static void StartMessageLoop()
     {
-        User32.GetMessage(out _, IntPtr.Zero, default, default);
+        User32.GetMessage(out _, default, default, default);
     }
+
+    /// <summary>
+    /// Checks if the current thread has a message loop.
+    /// </summary>
+    /// <remarks>
+    /// Thread must have a running message loop for a hook callback to be called.
+    /// </remarks>
+    static bool CurrentThreadHasMessageLoop => User32.PostThreadMessage(
+        (uint)Environment.CurrentManagedThreadId,
+        default, default, default
+        );
 
     /// <summary>
     /// Mutes <see cref="OnInput"/> event.

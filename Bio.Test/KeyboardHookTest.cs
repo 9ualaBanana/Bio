@@ -1,15 +1,14 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using FluentAssertions;
 using Xunit;
 
 namespace Bio.Test;
 
-public class LowLevelKeyboardHookTest
+public class KeyboardHookTest
 {
     readonly KeyboardHook _hook;
 
-    public LowLevelKeyboardHookTest()
+    public KeyboardHookTest()
     {
         _hook = new KeyboardHook();
     }
@@ -37,6 +36,7 @@ public class LowLevelKeyboardHookTest
         var syncHookSetting = Task.Run(() => _hook.Set(asynchronously: false));
         syncHookSetting.Wait(10);
 
+        _hook.IsSet.Should().BeTrue();
         syncHookSetting.IsCompleted.Should().BeFalse();
     }
 
