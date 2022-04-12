@@ -3,11 +3,11 @@
 namespace Bio.Win32;
 
 [StructLayout(LayoutKind.Sequential)]
-public struct KEYBDINPUT
+internal struct KEYBDINPUT
 {
-    public VirtualKey vkCode;
-    public ScanCode scanCode;
-    public KBDLLHOOKSTRUCTF flags;
-    public uint time;
-    public UIntPtr dwExtraInfo;
+    internal VK wVk;
+    internal SC wScan;
+    internal uint dwFlags;
+    internal int time;
+    internal UIntPtr dwExtraInfo;
 }

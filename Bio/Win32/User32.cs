@@ -5,6 +5,12 @@ namespace Bio.Win32;
 internal static class User32
 {
     [DllImport("User32.dll")]
+    internal static extern uint SendInput(uint nInputs, INPUT[] pInputs, int cbSize);
+
+    [DllImport("user32.dll")]
+    public static extern int GetAsyncKeyState(VK vKeys);
+
+    [DllImport("User32.dll")]
     internal static extern int GetMessage(out IntPtr lpMsg, IntPtr hWnd, uint wMsgFilterMin, uint wMsgFilterMax);
 
     [DllImport("user32.dll")]
