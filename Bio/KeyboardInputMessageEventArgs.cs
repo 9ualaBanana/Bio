@@ -8,22 +8,28 @@ namespace Bio;
 /// </summary>
 public class KeyboardInputMessageEventArgs : EventArgs
 {
+    /// <summary>
+    /// The indentifier of the keyboard message specifying the system action.
+    /// </summary>
     public WM WM;
-    public KEYBDINPUT KBDLLHOOKSTRUCT;
+    /// <summary>
+    /// The pointer to the structure containing the keyboard input data.
+    /// </summary>
+    public KBDLLHOOKSTRUCT KBDLLHOOKSTRUCT;
 
     /// <summary>
     /// Instantiates the wrapper for a low-level keyboard input message.
     /// </summary>
-    /// <param name="wParam">The identifier of the keyboard message.</param>
-    /// <param name="lParam">The pointer to the structure containing the keyboard input data.</param>
-    public KeyboardInputMessageEventArgs(IntPtr wParam, IntPtr lParam) 
-        : this((WM)wParam, Marshal.PtrToStructure<KEYBDINPUT>(lParam))
+    /// <param name="WM"><inheritdoc cref="WM"/></param>
+    /// <param name="KBDLLHOOKSTRUCT"><inheritdoc cref="KBDLLHOOKSTRUCT"/></param>
+    public KeyboardInputMessageEventArgs(IntPtr WM, IntPtr KBDLLHOOKSTRUCT) 
+        : this((WM)WM, Marshal.PtrToStructure<KBDLLHOOKSTRUCT>(KBDLLHOOKSTRUCT))
     {
     }
 
-    KeyboardInputMessageEventArgs(WM wParam, KEYBDINPUT lParam)
+    KeyboardInputMessageEventArgs(WM WM, KBDLLHOOKSTRUCT KBDLLHOOKSTRUCT)
     {
-        WM = wParam;
-        KBDLLHOOKSTRUCT = lParam;
+        this.WM = WM;
+        this.KBDLLHOOKSTRUCT = KBDLLHOOKSTRUCT;
     }
 }

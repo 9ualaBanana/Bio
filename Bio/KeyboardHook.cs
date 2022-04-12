@@ -4,7 +4,7 @@ using Bio.Win32;
 namespace Bio;
 
 /// <summary>
-/// An abstraction over a low-level keyboard input hook running in a background.
+/// An abstraction over a low-level keyboard hook running in a background.
 /// </summary>
 public class KeyboardHook : IDisposable
 {
@@ -36,6 +36,9 @@ public class KeyboardHook : IDisposable
     /// </remarks>
     public event KeyboardInputMessageEventHandler? OnInput;
 
+    /// <summary>
+    /// Instantiates an abstraction over a low-level keyboard hook.
+    /// </summary>
     public KeyboardHook()
     {
         _cts = new();
@@ -48,7 +51,7 @@ public class KeyboardHook : IDisposable
     IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam)
     {
         if (!_muted && nCode >= 0) OnInput?.Invoke(this, new(wParam, lParam));
-        return User32.CallNextHookEx(Handle, nCode, wParam, lParam);
+        return User32.CallNextHookEx(_hHook, nCode, wParam, lParam);
     }
 
     /// <summary>
@@ -148,7 +151,7 @@ public class KeyboardHook : IDisposable
     {
         GC.SuppressFinalize(this);
 
-        _cts.Cancel();
+        if (!_cts.IsCancellationRequested) _cts.Cancel();
         _cts.Dispose();
 
         User32.UnhookWindowsHookEx(_hHook);
