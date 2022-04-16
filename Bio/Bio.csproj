@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
 	  
 	<PackageId>Bio</PackageId>
-	<Version>2.1.1</Version>
+	<Version>2.1.5</Version>
 	<Authors>GualaBanana</Authors>
 	<Company>GualaBanana</Company>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
