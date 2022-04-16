@@ -1,5 +1,4 @@
 ﻿using Bio.Win32;
-using System;
 using System.Collections.Generic;
 
 namespace Bio.Test;

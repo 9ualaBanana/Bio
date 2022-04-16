@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Runtime.InteropServices;
 using Bio.Win32;
 
 namespace Bio;
@@ -27,7 +26,7 @@ public class KeyboardHook : IDisposable
     /// <summary>
     /// Checks the hook state.
     /// </summary>
-    public bool IsSet => _hHook != IntPtr.Zero;
+    public bool IsSet => _hHook != IntPtr.Zero && !_cts.IsCancellationRequested;
 
     /// <summary>
     /// The event raised upon detecting low-level keyboard input of the specefied type.
@@ -89,6 +88,9 @@ public class KeyboardHook : IDisposable
     /// <summary>
     /// Sets the low-level keyboard hook.
     /// </summary>
+    /// <remarks>
+    /// Blocks the thread on which it is set.
+    /// </remarks>
     /// <param name="muted">The state of the events raised by the hook.</param>
     /// <param name="asynchronously">Defines if the hook should be set on another thread.</param>
     public void Set(bool muted = false, bool asynchronously = true)
