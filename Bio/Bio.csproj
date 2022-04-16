@@ -10,7 +10,7 @@
 	<Authors>GualaBanana</Authors>
 	<Company>GualaBanana</Company>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Description>Full control of input/output on any level.</Description>
+    <Description>Full control of input on any level.</Description>
     <RepositoryUrl>https://github.com/GualaBanana/Bio</RepositoryUrl>
     <PackageTags>io; input; output; hook; keyboard; input-listener; library;</PackageTags>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
