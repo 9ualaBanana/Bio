@@ -1,9 +1,7 @@
-﻿using Bio.Win32;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Bio.Win32;
 using FluentAssertions;
 using Xunit;
-using System;
-using System.Collections.Generic;
 
 namespace Bio.Test;
 
@@ -48,33 +46,75 @@ public class KeyboardHookTest
     }
 
     [Theory]
-    [MemberData(nameof(Input))]
-    public void Set_Muted_SetsMutedHook(KeyboardInput input)
+    [MemberData(nameof(TestData.VkLetters), MemberType = typeof(TestData))]
+    [MemberData(nameof(TestData.VkNumbers), MemberType = typeof(TestData))]
+    public void Set_Muted_DoesNotRaiseEventsOnInput(VK vkCode)
     {
         using var _hook = new KeyboardHook();
         _hook.Set(muted: true);
         using var mutedHook = _hook.Monitor();
 
-        input.Synthesize();
+        KeyboardInput.SynthesizePress(vkCode);
 
-        mutedHook.Should().NotRaise(nameof(_hook.OnInput));
+        mutedHook.Should().NotRaise(nameof(_hook.KeyDown));
+        mutedHook.Should().NotRaise(nameof(_hook.KeyUp));
     }
 
     [Theory]
-    [MemberData(nameof(Input))]
-    public void OnInput_Unmuted_RaisesEvents(KeyboardInput input)
+    [MemberData(nameof(TestData.VkLetters), MemberType = typeof(TestData))]
+    [MemberData(nameof(TestData.VkNumbers), MemberType = typeof(TestData))]
+    public void Set_Unmuted_RaisesKeyDownOnInput(VK vkCode)
     {
         using var _hook = new KeyboardHook();
         _hook.Set(muted: false);
         using var unmutedHook = _hook.Monitor();
 
-        input.Synthesize();
+        KeyboardInput.Synthesize(WM.KEYDOWN, vkCode);
 
         unmutedHook.Should()
-            .Raise(nameof(_hook.OnInput))
+            .Raise(nameof(_hook.KeyDown))
             .WithSender(_hook)
-            .WithArgs<KeyboardInputMessageEventArgs>();
+            .WithArgs<KeyboardInputMessage>();
     }
+    
+    [Theory]
+    [MemberData(nameof(TestData.VkLetters), MemberType = typeof(TestData))]
+    [MemberData(nameof(TestData.VkNumbers), MemberType = typeof(TestData))]
+    public void Set_Unmuted_RaisesKeyUpOnInput(VK vkCode)
+    {
+        using var _hook = new KeyboardHook();
+        _hook.Set(muted: false);
+        using var unmutedHook = _hook.Monitor();
+
+        KeyboardInput.Synthesize(WM.KEYUP, vkCode);
+
+        unmutedHook.Should()
+            .Raise(nameof(_hook.KeyUp))
+            .WithSender(_hook)
+            .WithArgs<KeyboardInputMessage>();
+    }
+    
+    [Theory]
+    [MemberData(nameof(TestData.VkLetters), MemberType = typeof(TestData))]
+    [MemberData(nameof(TestData.VkNumbers), MemberType = typeof(TestData))]
+    public void Set_Unmuted_RaisesKeyUpAndKeyDownOnPress(VK vkCode)
+    {
+        using var _hook = new KeyboardHook();
+        _hook.Set(muted: false);
+        using var unmutedHook = _hook.Monitor();
+
+        KeyboardInput.SynthesizePress(vkCode);
+
+        unmutedHook.Should()
+            .Raise(nameof(_hook.KeyDown))
+            .WithSender(_hook)
+            .WithArgs<KeyboardInputMessage>();
+        unmutedHook.Should()
+            .Raise(nameof(_hook.KeyUp))
+            .WithSender(_hook)
+            .WithArgs<KeyboardInputMessage>();
+    }
+
 
     [Fact]
     public void Dispose_DisposesHook()
@@ -92,14 +132,5 @@ public class KeyboardHookTest
         Task.Run(() => _hook.Dispose()).Wait();
 
         _hook.IsSet.Should().BeFalse();
-    }
-
-    static IEnumerable<object[]> Input()
-    {
-        foreach (var vkCode in Enum.GetValues<VK>())
-        {
-            if (vkCode >= VK.KEY_0 && vkCode <= VK.KEY_Z)
-                yield return new object[] { new KeyboardInput(vkCode) };
-        }
     }
 }

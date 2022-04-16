@@ -11,50 +11,37 @@ public class KeyboardInput
     const uint INPUT_KEYBOARD = 1;
     const uint KEYEVENTF_KEYUP = 0x0002;
 
-    readonly INPUT[] _input;
-
     /// <summary>
-    /// Simulates keyboard input events (press and release) that can be injected into input stream.
+    /// Synthesizes both, <see cref="WM.KEYDOWN"/> and <see cref="WM.KEYUP"/> messages.
     /// </summary>
-    /// <param name="vkCodes"><inheritdoc cref="KeyboardInput(bool, VK[])"/></param>
-    public KeyboardInput(params VK[] vkCodes) : this(true, vkCodes)
+    /// <param name="vkCodes">The virtual-key codes for which input should be synthesized.</param>
+    /// <returns>The number of keyboard input events successfully injected into the input stream.</returns>
+    public static uint SynthesizePress(params VK[] vkCodes)
     {
+        var input = new INPUT[vkCodes.Length * 2];
+        for (int i = 1, vkCode = 0; vkCode < vkCodes.Length; i += 2, vkCode++)
+        {
+            input[i - 1] = Simulate(vkCodes[vkCode]);
+            input[i] = Simulate(vkCodes[vkCode], KEYEVENTF_KEYUP);
+        }
+        return Synthesize(input);
     }
 
     /// <summary>
-    /// Simulates keyboard input events that can be injected into input stream.
+    /// Wrapper for <see cref="User32.SendInput(uint, INPUT[], int)"/>.
     /// </summary>
-    /// <param name="keyUp">Specifies if key release event should be included along with key press event.</param>
-    /// <param name="vkCodes">The virtual-key codes to be turned to input events.</param>
-    public KeyboardInput(bool keyUp, params VK[] vkCodes)
+    /// <param name="message">The type of keyboard input event that should be synthesized.</param>
+    /// <param name="vkCodes">The virtual-key codes for which input should be synthesized.</param>
+    /// <returns>The number of keyboard input events successfully injected into the input stream.</returns>
+    public static uint Synthesize(WM message, params VK[] vkCodes)
     {
-        _input = Simulate(keyUp, vkCodes);
-    }
-
-    /// <summary>
-    /// <inheritdoc cref="KeyboardInput(bool, VK[])"/>
-    /// </summary>
-    /// <param name="keyUp"><inheritdoc cref="KeyboardInput(bool, VK[])"/></param>
-    /// <param name="vkCodes"><inheritdoc cref="KeyboardInput(bool, VK[])"/></param>
-    public static INPUT[] Simulate(bool keyUp = true, params VK[] vkCodes)
-    {
-        var input = new INPUT[keyUp ? vkCodes.Length * 2 : vkCodes.Length];
-        if (keyUp)
+        var input = new INPUT[vkCodes.Length];
+        var dwFlags = message == WM.KEYUP || message == WM.SYSKEYUP ? KEYEVENTF_KEYUP : 0;
+        for (int i = 0; i < vkCodes.Length; i++)
         {
-            for (int i = 1; i < vkCodes.Length; i += 2)
-            {
-                input[i] = Simulate(vkCodes[i], KEYEVENTF_KEYUP);
-                input[i - 1] = Simulate(vkCodes[i]);
-            }
+            input[i] = Simulate(vkCodes[i], dwFlags);
         }
-        else
-        {
-            for (int i = 0; i < vkCodes.Length; i++)
-            {
-                input[i] = Simulate(vkCodes[i]);
-            }
-        }
-        return input;
+        return Synthesize(input);
     }
 
     static INPUT Simulate(VK vkCode, uint dwFlags = default)
@@ -65,21 +52,7 @@ public class KeyboardInput
         return input;
     }
 
-    /// <summary>
-    /// Wrapper for <see cref="User32.SendInput(uint, INPUT[], int)"/>.
-    /// </summary>
-    /// <returns>The number of keystroke events successfully injected into the input stream.</returns>
-    public uint Synthesize()
-    {
-        return Synthesize(_input);
-    }
-
-    /// <summary>
-    /// <inheritdoc cref="Synthesize()"/>
-    /// </summary>
-    /// <param name="input">The keyboard input events to be injected into the input stream.</param>
-    /// <returns><inheritdoc cref="Synthesize()"/></returns>
-    public static uint Synthesize(INPUT[] input)
+    static uint Synthesize(INPUT[] input)
     {
         return User32.SendInput((uint)input.Length, input, Marshal.SizeOf<INPUT>());
     }

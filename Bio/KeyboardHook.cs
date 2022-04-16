@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
 using Bio.Win32;
 
 namespace Bio;
@@ -29,12 +30,19 @@ public class KeyboardHook : IDisposable
     public bool IsSet => _hHook != IntPtr.Zero;
 
     /// <summary>
-    /// The event raised upon receiving low-level keyboard input.
+    /// The event raised upon detecting low-level keyboard input of the specefied type.
     /// </summary>
     /// <remarks>
     /// Use <see cref="Mute"/>/<see cref="Unmute"/> to control the behavior of this event.
     /// </remarks>
-    public event KeyboardInputMessageEventHandler? OnInput;
+    public event EventHandler<KeyboardInputMessage>? KeyDown;
+    /// <summary>
+    /// <inheritdoc cref="KeyDown"/>
+    /// </summary>
+    /// <remarks>
+    /// <inheritdoc cref="KeyDown"/>
+    /// </remarks>
+    public event EventHandler<KeyboardInputMessage>? KeyUp;
 
     /// <summary>
     /// Instantiates an abstraction over a low-level keyboard hook.
@@ -50,8 +58,22 @@ public class KeyboardHook : IDisposable
     /// </summary>
     IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam)
     {
-        if (!_muted && nCode >= 0) OnInput?.Invoke(this, new(wParam, lParam));
+        if (!_muted && nCode >= 0) RaiseCorrespondingEvent(wParam, lParam);
         return User32.CallNextHookEx(_hHook, nCode, wParam, lParam);
+    }
+
+    void RaiseCorrespondingEvent(IntPtr wParam, IntPtr lParam)
+    {
+        var keyboardInputMessage = new KeyboardInputMessage(wParam, lParam);
+
+        if (keyboardInputMessage.WM == WM.KEYDOWN || keyboardInputMessage.WM == WM.SYSKEYDOWN)
+        {
+            KeyDown?.Invoke(this, keyboardInputMessage);
+        }
+        else
+        {
+            KeyUp?.Invoke(this, keyboardInputMessage);
+        }
     }
 
     /// <summary>
@@ -119,7 +141,7 @@ public class KeyboardHook : IDisposable
         );
 
     /// <summary>
-    /// Mutes <see cref="OnInput"/> event.
+    /// Mutes <see cref="KeyDown"/> and <see cref="KeyUp"/> events.
     /// </summary>
     /// <remarks>
     /// Does not affect the hook in any way.
@@ -130,7 +152,7 @@ public class KeyboardHook : IDisposable
     }
 
     /// <summary>
-    /// Unmutes <see cref="OnInput"/> event.
+    /// Unmutes <see cref="KeyDown"/> and <see cref="KeyUp"/> events.
     /// </summary>
     /// <remarks>
     /// <inheritdoc cref="Mute"/>

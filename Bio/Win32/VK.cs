@@ -1,5 +1,8 @@
 ﻿namespace Bio.Win32;
 
+/// <summary>
+/// Virtual-key codes.
+/// </summary>
 public enum VK : short
 {
     ///<summary>
