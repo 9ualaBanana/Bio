@@ -4,7 +4,7 @@
 
 ## ✅ Why choose Bio?
 
-**Bio** allows monitoring keyboard input on *any* level of abstraction. It provides an easy-to-use wrapper for the native Win32 low-level keyboard hook as well as the class for working with detected input in a sophisticated way with a * rich* set of information about each input event.
+**Bio** allows monitoring keyboard input on *any* level of abstraction. It provides an easy-to-use wrapper for the native Win32 low-level keyboard hook as well as the class for working with detected input in a sophisticated way with a *rich* set of information about each input event.
 
 ## 🔩 Usage
 ### Low-level Hook
@@ -38,7 +38,8 @@ keySpy.Unmute();
 
 void KeySpy_HandleHighLevelInputEvent(object? sender, KeyInfo e)
 {
-    // KeyInfo is basically an advanced version of ConsoleKeyInfo that supports all keys and can differentiate between left and right modifier keys.
+    // KeyInfo is basically an advanced version of ConsoleKeyInfo
+    // that supports all keys and can differentiate between left and right modifier keys.
     VK vkCode = e.VK;
     char keyChar = e.KeyChar;
     ConsoleKey consoleKey = e.ConsoleKey;
@@ -51,7 +52,7 @@ void KeySpy_HandleHighLevelInputEvent(object? sender, KeyInfo e)
 using Bio;
 using Bio.Win32;
 
-KeyboardInput.SynthesizePress(VK.LSHIFT, VK.KEY_A);
+KeyboardInput.SynthesizePress(VK.LSHIFT, VK.KEY_A, VK.KEY_B);
 KeyboardInput.Synthesize(WM.KEYDOWN, VK.KEY_0);
 KeyboardInput.Synthesize(WM.KEYUP, VK.KEY_0);
 ```
