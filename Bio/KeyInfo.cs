@@ -20,9 +20,26 @@ public struct KeyInfo
     /// </summary>
     public ConsoleKey ConsoleKey;
     /// <summary>
-    /// Modifier keys involved.
+    /// Distinguishes left and right modifiers and treats them as different keys.
     /// </summary>
     public ModifierKeys ModifierKeys;
+    /// <summary>
+    /// Does not distinguish left and right modifiers and treats them as the same keys.
+    /// </summary>
+    public ConsoleModifiers ConsoleModifiers
+    {
+        get
+        {
+            ConsoleModifiers consoleModifiers = 0;
+            if (ModifierKeys.HasFlag(ModifierKeys.ShiftLeft) || ModifierKeys.HasFlag(ModifierKeys.ShiftRight))
+                consoleModifiers |= ConsoleModifiers.Shift;
+            if (ModifierKeys.HasFlag(ModifierKeys.ControlLeft) || ModifierKeys.HasFlag(ModifierKeys.ControlRight))
+                consoleModifiers |= ConsoleModifiers.Control;
+            if (ModifierKeys.HasFlag(ModifierKeys.AltLeft) || ModifierKeys.HasFlag(ModifierKeys.AltRight))
+                consoleModifiers |= ConsoleModifiers.Alt;
+            return consoleModifiers;
+        }
+    }
 
     /// <summary>
     /// <inheritdoc cref="KeyInfo(VK, ModifierKeys, IntPtr)"/>
