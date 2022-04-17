@@ -38,7 +38,8 @@ keySpy.Unmute();
 
 void KeySpy_HandleHighLevelInputEvent(object? sender, KeyInfo e)
 {
-    // KeyInfo is basically an advanced version of ConsoleKeyInfo that supports all keys and can differentiate between left and right modifier keys.
+    // KeyInfo is basically an advanced version of ConsoleKeyInfo
+    // that supports all keys and can differentiate between left and right modifier keys.
     VK vkCode = e.VK;
     char keyChar = e.KeyChar;
     ConsoleKey consoleKey = e.ConsoleKey;
@@ -51,7 +52,7 @@ void KeySpy_HandleHighLevelInputEvent(object? sender, KeyInfo e)
 using Bio;
 using Bio.Win32;
 
-KeyboardInput.SynthesizePress(VK.LSHIFT, VK.KEY_A);
+KeyboardInput.SynthesizePress(VK.LSHIFT, VK.KEY_A, VK.KEY_B);
 KeyboardInput.Synthesize(WM.KEYDOWN, VK.KEY_0);
 KeyboardInput.Synthesize(WM.KEYUP, VK.KEY_0);
 ```
