@@ -4,7 +4,7 @@
 
 ## ✅ Why choose Bio?
 
-**Bio** allows monitoring keyboard input on *any* level of abstraction. It provides an easy-to-use wrapper for the native Win32 low-level keyboard hook as well as the class for working with detected input in a sophisticated way with a * rich* set of information about each input event.
+**Bio** allows monitoring keyboard input on *any* level of abstraction. It provides an easy-to-use wrapper for the native Win32 low-level keyboard hook as well as the class for working with detected input in a sophisticated way with a *rich* set of information about each input event.
 
 ## 🔩 Usage
 ### Low-level Hook
