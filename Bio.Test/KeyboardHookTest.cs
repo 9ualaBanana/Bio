@@ -60,62 +60,6 @@ public class KeyboardHookTest
         mutedHook.Should().NotRaise(nameof(_hook.KeyUp));
     }
 
-    [Theory]
-    [MemberData(nameof(TestData.VkLetters), MemberType = typeof(TestData))]
-    [MemberData(nameof(TestData.VkNumbers), MemberType = typeof(TestData))]
-    public void Set_Unmuted_RaisesKeyDownOnInput(VK vkCode)
-    {
-        using var _hook = new KeyboardHook();
-        _hook.Set(muted: false);
-        using var unmutedHook = _hook.Monitor();
-
-        KeyboardInput.Synthesize(WM.KEYDOWN, vkCode);
-
-        unmutedHook.Should()
-            .Raise(nameof(_hook.KeyDown))
-            .WithSender(_hook)
-            .WithArgs<KeyboardInputMessage>();
-    }
-    
-    [Theory]
-    [MemberData(nameof(TestData.VkLetters), MemberType = typeof(TestData))]
-    [MemberData(nameof(TestData.VkNumbers), MemberType = typeof(TestData))]
-    public void Set_Unmuted_RaisesKeyUpOnInput(VK vkCode)
-    {
-        using var _hook = new KeyboardHook();
-        _hook.Set(muted: false);
-        using var unmutedHook = _hook.Monitor();
-
-        KeyboardInput.Synthesize(WM.KEYUP, vkCode);
-
-        unmutedHook.Should()
-            .Raise(nameof(_hook.KeyUp))
-            .WithSender(_hook)
-            .WithArgs<KeyboardInputMessage>();
-    }
-    
-    [Theory]
-    [MemberData(nameof(TestData.VkLetters), MemberType = typeof(TestData))]
-    [MemberData(nameof(TestData.VkNumbers), MemberType = typeof(TestData))]
-    public void Set_Unmuted_RaisesKeyUpAndKeyDownOnPress(VK vkCode)
-    {
-        using var _hook = new KeyboardHook();
-        _hook.Set(muted: false);
-        using var unmutedHook = _hook.Monitor();
-
-        KeyboardInput.SynthesizePress(vkCode);
-
-        unmutedHook.Should()
-            .Raise(nameof(_hook.KeyDown))
-            .WithSender(_hook)
-            .WithArgs<KeyboardInputMessage>();
-        unmutedHook.Should()
-            .Raise(nameof(_hook.KeyUp))
-            .WithSender(_hook)
-            .WithArgs<KeyboardInputMessage>();
-    }
-
-
     [Fact]
     public void Dispose_DisposesHook()
     {

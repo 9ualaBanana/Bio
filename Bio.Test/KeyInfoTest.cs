@@ -70,5 +70,4 @@ public class KeyInfoTest
 
         keyInfo.ConsoleModifiers.Should().HaveFlag(consoleModifier);
     }
-
 }
