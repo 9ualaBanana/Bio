@@ -171,6 +171,7 @@ public class KeyboardHook : IDisposable
     /// </summary>
     public void Remove() => Dispose();
 
+    /// <inheritdoc/>
     public void Dispose()
     {
         GC.SuppressFinalize(this);

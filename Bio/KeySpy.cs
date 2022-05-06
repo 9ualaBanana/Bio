@@ -100,8 +100,11 @@ public class KeySpy : IDisposable
 
     void ToggleEvents() => _muted = !_muted;
 
+    /// <inheritdoc/>
     public void Dispose()
     {
+        GC.SuppressFinalize(this);
+
         _hook?.Dispose();
     }
 }
